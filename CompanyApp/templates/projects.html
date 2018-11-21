@@ -1,0 +1,33 @@
+{% extends "layout.html" %}
+{% block content %}
+        <article class="media content-section">
+          <div class="media-body">
+            <div class="article-metadata">
+              <h2 class="article-title" >Projects</h2>
+            </div>
+             <table class = "table table-bordered table-hover ">
+				<thead class="thead-dark">
+					<tr>
+						<th>Project Name</th>
+						<th>Project Number</th>
+						<th>Project Location</th>
+						<th>Options</th>
+					</tr>
+				</thead>
+				<tbody>
+				 {% for project in projectsData %}
+					<tr>
+						<td>{{ project['pname'] }}</td>
+						<td>{{ project['pnumber'] }}</td>
+						<td>{{ project['plocation'] }}</td>
+						<td>
+							<a class="btn btn-primary btn-sm m-1" href = "{{url_for('project', projectNumber = project['pnumber'])}}">View</a>
+							<a class="btn btn-primary btn-sm m-1" href = "{{url_for('home')}}">Update</a>
+						</td>
+					</tr>
+				 {% endfor %}
+				 </tbody>
+			 </table>
+          </div>
+        </article>
+{% endblock content %}

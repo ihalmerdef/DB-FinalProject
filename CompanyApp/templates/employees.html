@@ -1,0 +1,38 @@
+{% extends "layout.html" %}
+{% block content %}
+        <article class="media content-section">
+          <div class="media-body">
+            <div class="article-metadata">
+              <h2 class="article-title" >Employees</h2>
+            </div>
+             <table class = "table table-bordered table-hover ">
+				<thead class="thead-dark">
+					<tr>
+						<th>First Name</th>
+						<th>Middle Inital</th>
+						<th>Last Name</th>
+						<th>SSN</th>
+						<th>Birth Date</th>
+						<th>Address</th>
+						<th>Sex</th>
+						<th>Salary</th>
+					</tr>
+				</thead>
+				<tbody>
+				 {% for employee in employeesData %}
+					<tr>
+						<td>{{ employee['fname'] }}</td>
+						<td>{{ employee['minit'] }}</td>
+						<td>{{ employee['lname'] }}</td>
+						<td>{{ employee['ssn'] }}</td>
+						<td>{{ employee['bdate'] }}</td>
+						<td>{{ employee['address'] }}</td>
+						<td>{{ employee['sex'] }}</td>
+						<td>{{ employee['salary'] }}</td>
+					</tr>
+				 {% endfor %}
+				 </tbody>
+			 </table>
+          </div>
+        </article>
+{% endblock content %}

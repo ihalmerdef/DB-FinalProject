@@ -1,0 +1,26 @@
+{% extends "layout.html" %}
+{% block content %}
+        <article class="media content-section">
+          <div class="media-body">
+            <div class="article-metadata">
+              <h2 class="article-title" >Projects Assignment</h2>
+            </div>
+             <table class = "table table-bordered table-hover ">
+				<thead class="thead-dark">
+					<tr>
+						<th>Project</th>
+						<th>Employee</th>
+					</tr>
+				</thead>
+				<tbody>
+				 {% for row in data %}
+					<tr>
+						<td>{{ row['pname'] }}</td>
+						<td>{{ row['fname'] }} {{ row['lname']}}</td>
+					</tr>
+				 {% endfor %}
+				 </tbody>
+			 </table>
+          </div>
+        </article>
+{% endblock content %}
