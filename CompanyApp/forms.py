@@ -5,7 +5,7 @@ from wtforms import StringField, PasswordField, SubmitField, BooleanField, TextA
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError,Regexp
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
 from CompanyApp import db
-from CompanyApp.models import User, Department, Employee, getDepartment, getDepartmentFactory
+from CompanyApp.models import Address, Customer,Favorite_List, Menu, Restaurant, Restaurant_Owner, Review, User
 from wtforms.fields.html5 import DateField
 
 choices = list()

@@ -40,32 +40,35 @@ class Post(db.Model):
 
 
 
-class Dependent(db.Model):
-    __table__ = db.Model.metadata.tables['dependent']
+class Address(db.Model):
+    __table__ = db.Model.metadata.tables['address']
     
-class Department(db.Model):
-    __table__ = db.Model.metadata.tables['department']
+class Customer(db.Model):
+    __table__ = db.Model.metadata.tables['customer']
 
 # used for query_factory
-def getDepartment(columns=None):
-    u = Department.query
-    if columns:
-        u = u.options(orm.load_only(*columns))
-    return u
+#def getDepartment(columns=None):
+#   u = Department.query
+#   if columns:
+#       u = u.options(orm.load_only(*columns))
+#   return u
 
-def getDepartmentFactory(columns=None):
-    return partial(getDepartment, columns=columns)
+        #def getDepartmentFactory(columns=None):
+#return partial(getDepartment, columns=columns)
 
-class Dept_Locations(db.Model):
-    __table__ = db.Model.metadata.tables['dept_locations']
+class Favorite_List(db.Model):
+    __table__ = db.Model.metadata.tables['favorite_list']
     
-class Employee(db.Model):
-    __table__ = db.Model.metadata.tables['employee']
-class Project(db.Model):
-    __table__ = db.Model.metadata.tables['project']
-class Works_On(db.Model):
-    __table__ = db.Model.metadata.tables['works_on']
-
+class Menu(db.Model):
+    __table__ = db.Model.metadata.tables['menu']
+class Restaurant(db.Model):
+    __table__ = db.Model.metadata.tables['restaurant']
+class Restaurant_Owner(db.Model):
+    __table__ = db.Model.metadata.tables['restaurant_owner']
+class Review(db.Model):
+    __table__ = db.Model.metadata.tables['review']
+class User(db.Model):
+    __table__ = db.Model.metadata.tables['user']
     
 
   
