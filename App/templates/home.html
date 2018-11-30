@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+{% block content %}
+    {% for post in posts %}
+        <article class="media content-section">
+          <img class="rounded-circle article-img" src="">
+          <div class="media-body">
+            <div class="article-metadata">
+              <a class="mr-2" href="#">placeholder text</a>
+              <small class="text-muted">placeholder text</small>
+            </div>
+            <h2><a class="article-title" href="#">placeholder text</a></h2>
+            <p class="article-content">placeholder text</p>
+          </div>
+        </article>
+    {% endfor %}
+{% endblock content %}

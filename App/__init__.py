@@ -22,8 +22,8 @@ login_manager = LoginManager(app)
 login_manager.login_view = 'login'
 login_manager.login_message_category = 'info'
 
-from CompanyApp import routes
-from CompanyApp import models
+from App import routes
+from App import models
 
 #models.db.create_all()
 
