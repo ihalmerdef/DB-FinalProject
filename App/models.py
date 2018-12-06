@@ -1,14 +1,18 @@
 from datetime import datetime
 from App import db, login_manager
 from flask_login import UserMixin
-from functools import partial #for using the query_factory 
+from functools import partial #for using the query_factory
 from sqlalchemy import orm
 
 db.Model.metadata.reflect(db.engine)
 
 @login_manager.user_loader
 def load_user(user_id):
-	return User.query.get(int(user_id))
+	result = Customer.query.get(int(user_id))
+
+	result = RestaurantOwner.query.get(int(user_id))
+	print(type(result))
+	return result
 
 class User(db.Model, UserMixin):
 	__table_args__ = {'extend_existing': True}
@@ -17,7 +21,7 @@ class User(db.Model, UserMixin):
 	email = db.Column(db.String(120), unique=True, nullable=False)
 	photo = db.Column(db.String(20), nullable=False, default='default.jpg')
 	password = db.Column(db.String(60), nullable=False)
-    #posts = db.relationship('Post', backref='authxor', lazy=True)
+	#posts = db.relationship('Post', backref='authxor', lazy=True)
 
 	def __repr__(self):
 		return f"User('{self.username}', '{self.email}', '{self.photo}')"
@@ -35,22 +39,18 @@ class Post(db.Model):
 
 class Address(db.Model):
 	__table__ = db.Model.metadata.tables['address']
-	
-class Customer(db.Model):
+
+class Customer(db.Model, UserMixin):
 	__table__ = db.Model.metadata.tables['customer']
 
-# used for query_factory
-#def getDepartment(columns=None):
-#   u = Department.query
-#   if columns:
-#	   u = u.options(orm.load_only(*columns))
-#   return u
+class Label(db.Model):
+	__table__ = db.Model.metadata.tables['label']
 
-		#def getDepartmentFactory(columns=None):
-#return partial(getDepartment, columns=columns)
+class MenuItem(db.Model):
+	__table__ = db.Model.metadata.tables['menuItem']
 
-class Favorite_List(db.Model):
-	__table__ = db.Model.metadata.tables['favorite_list']
+class FavoriteList(db.Model):
+	__table__ = db.Model.metadata.tables['favoriteList']
 
 class Menu(db.Model):
 	__table__ = db.Model.metadata.tables['menu']
@@ -58,8 +58,8 @@ class Menu(db.Model):
 class Restaurant(db.Model):
 	__table__ = db.Model.metadata.tables['restaurant']
 
-class Restaurant_Owner(db.Model):
-	__table__ = db.Model.metadata.tables['restaurant_owner']
+class RestaurantOwner(db.Model, UserMixin):
+	__table__ = db.Model.metadata.tables['restaurantOwner']
 
 class Review(db.Model):
 	__table__ = db.Model.metadata.tables['review']
@@ -67,3 +67,8 @@ class Review(db.Model):
 class Photos(db.Model):
     __table__ = db.Model.metadata.tables['photos']
 
+class Restaurant_Label(db.Model):
+	__table__ = db.Model.metadata.tables['restaurant_label']
+
+class Restaurant_FavoriteList(db.Model):
+	__table__ = db.Model.metadata.tables['restaurant_favoriteList']

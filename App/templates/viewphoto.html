@@ -8,20 +8,18 @@
         <table class = "table table-bordered table-hover ">
             <thead class="thead-dark">
                 <tr>
-    
+
                     <th>Resturants Picture</th>
-                   
+
                 </tr>
             </thead>
             <tbody>
                 {% for photos in Viewphoto %}
                 <tr>
                     <td>{{ photos['id'] }}</td>
-                    <td>{{ photos['data'] }}</td>
-                    <td> <img class="rounded-circle account-img" src="{{ photos['data'] }}">
-                    <td>
-                        
-                    </td>
+                    <td></td>
+                    <td> <img class="rounded-circle account-img" src="{{ photos['data'] }}"/></td>
+                    <td> </td>
                 </tr>
                 {% endfor %}
             </tbody>

@@ -26,7 +26,7 @@ login_manager.login_message_category = 'info'
 from App import routes
 from App import models
 
-#models.db.create_all()
+models.db.create_all()
 
 def connect():
 	""" Connect to MySQL database """
@@ -35,7 +35,7 @@ def connect():
 		if conn.is_connected():
 			print('Connected to MySQL database via Mysql Connector')
 	except Error as e:
-		print(e) 
+		print(e)
 	finally:
 		conn.close()
 connect()
