@@ -1,4 +1,4 @@
-country{% extends "layout.html" %}
+{% extends "layout.html" %}
 {% block content %}
     <div class="content-section">
         <form method="POST" action="">
@@ -100,7 +100,6 @@ country{% extends "layout.html" %}
                         {{ form.streetAddress(class="form-control form-control-lg") }}
                     {% endif %}
                 </div>
-                <legend class="border-bottom mb-4">Address Line</legend>
                 <div class="form-group">
                     {{ form.unitNumber.label(class="form-control-label") }}
                     {% if form.unitNumber.errors %}

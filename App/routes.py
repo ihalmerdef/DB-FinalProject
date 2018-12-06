@@ -46,10 +46,11 @@ def register():
 	form = RegistrationForm()
 	if form.validate_on_submit():
 		hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-		user = Customer(firstName = form.firstName.data, lastName = form.lastName.data, username = form.username.data, email = form.email.data, password = hashed_password)
 		address = Address(streetAddress = form.streetAddress.data, unitNumber = form.unitNumber.data, city = form.city.data, state = form.state.data, zipCode = form.zipCode.data, country = form.country.data)
-		db.session.add(user)
 		db.session.add(address)
+		db.session.commit()
+		user = Customer(firstName = form.firstName.data, lastName = form.lastName.data, address_id = address.id, username = form.username.data, email = form.email.data, password = hashed_password)
+		db.session.add(user)
 		db.session.commit()
 		flash('Your account has been created! You are now able to log in', 'success')
 		return redirect(url_for('login'))
