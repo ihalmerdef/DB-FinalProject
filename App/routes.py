@@ -3,7 +3,7 @@ import secrets
 from PIL import Image
 from flask import render_template, url_for, flash, redirect, request, abort
 from App import app, db, bcrypt
-from App.forms import RegistrationForm, LoginForm, UpdateAccountForm, creat_resturantForm, update_resturantForm
+from App.forms import RegistrationForm, LoginForm, UpdateAccountForm, CreateResturantForm, update_resturantForm
 # importing models
 from App.models import Address, Customer, FavoriteList, Label, MenuItem,Restaurant_FavoriteList, Menu, Restaurant, RestaurantOwner, Review, Restaurant_Label
 from flask_login import login_user, current_user, logout_user, login_required
@@ -17,22 +17,6 @@ from datetime import datetime
 @app.route("/home")
 def home():
 	return render_template("home.html", title = 'Home')
-
-
-#@app.route("/upload", methods=['POST'])
-#def upload():
-#	file = request.files['inputFile']
-#	newFile = Photos(data=file.read())
-#	db.session.add(newFile)
-#	db.session.commit()
-#	flash('Your Image has been uploaded!', 'success')
-#	return render_template('home.html', title='home')
-
-#@app.route("/viewphoto", methods=['GET', 'POST'])
-#def viewphoto():
-#	Viewphoto= Photos.query.all()
-#	return render_template('viewphoto.html', title='view_photo', Viewphoto= Viewphoto )
-
 
 
 @app.route("/about")
@@ -57,33 +41,35 @@ def register():
 #picture_file= url_for('static', filename='profile_pics/' + resturant.photo)
 	return render_template('register.html', title='Register',form=form)
 
-def save_picture(form_picture):
+def save_picture_restaurant(form_picture):
 	random_hex = secrets.token_hex(8)
 	_, f_ext = os.path.splitext(form_picture.filename)
 	picture_fn = random_hex + f_ext
-	picture_path = os.path.join(app.root_path, 'static/profile_pics', picture_fn)
-
+	picture_path = os.path.join(app.root_path, 'static/restaurant_pics', picture_fn)
 	output_size = (125, 125)
 	i = Image.open(form_picture)
 	i.thumbnail(output_size)
 	i.save(picture_path)
-
 	return picture_fn
 
 
-@app.route("/creat_resturant", methods=['GET', 'POST'])
-@login_required
-def creat_resturant():
-	form = creat_resturantForm()
+@app.route("/creatRestaurant", methods=['GET', 'POST'])
+#@login_required
+def createRestaurant():
+	form = CreateResturantForm()
 	if form.validate_on_submit():
 		if form.picture.data:
-			picture_file = save_picture(form.picture.data)
-		resturant = Restaurant(name=form.name.data, phone_number=form.phone_number.data,description=form.description.data,picture=form.picture.data)
-		db.session.add(resturant)
+			picture_file = save_picture_restaurant(form.picture.data)
+		address = Address(streetAddress = form.streetAddress.data, unitNumber = form.unitNumber.data, city = form.city.data, state = form.state.data, zipCode = form.zipCode.data, country = form.country.data)
+		db.session.add(address)
 		db.session.commit()
-		flash('Your resturant has been created!', 'success')
+		pictureFile = save_picture_restaurant(form.picture.data)
+		restaurant = Restaurant(name=form.name.data, phoneNumber = form.phoneNumber.data,description = form.description.data, picture = pictureFile, address_id = address.id, restaurantOwner_id = 2)
+		db.session.add(restaurant)
+		db.session.commit()
+		flash('Your restaurant has been created!', 'success')
 		return redirect(url_for('home'))
-	return render_template('creat_resturant.html', title='CreateResturant',form=form)
+	return render_template('creat_resturant.html', title='CreateRestaurant',form=form)
 
 @app.route("/update_resturant", methods=['GET', 'POST'])
 @login_required
@@ -105,11 +91,11 @@ def update_resturant():
 
 
 
-@app.route("/view_resturant", methods=['GET', 'POST'])
-@login_required
-def view_resturant():
-	ViewRestuants= Restaurant.query.all()
-	return render_template('view_resturant.html', title='Account', ViewRestuants= ViewRestuants )
+@app.route("/viewRestaurant/<restaurantId>", methods=['GET', 'POST'])
+#TODO: @login_required
+def viewRestaurant(restaurantId):
+	restaurant = Restaurant.query.get_or_404(restaurantId)
+	return render_template('viewRestaurant.html', title='Restaurant', restaurant= restaurant)
 
 
 
@@ -150,5 +136,6 @@ def account():
 	elif request.method == 'GET':
 		form.username.data = current_user.username
 		form.email.data = current_user.email
-	photo= url_for('static', filename='profile_pics/' + current_user.photo)
+	
+
 	return render_template('account.html', title='Account', photo=photo, form=form)

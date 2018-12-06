@@ -33,13 +33,18 @@ class RegistrationForm(FlaskForm):
 		if customer:
 			raise ValidationError('That email is taken. Please choose a different one.')
 
-class creat_resturantForm(FlaskForm):
+class CreateResturantForm(FlaskForm):
 	name = StringField('Restaurant Name', validators=[DataRequired(), Length(min=2, max=20)])
-	phone_number = StringField('Phone Number', validators=[DataRequired(), Length(min=2, max=20)])
-	description= StringField('Restaurant description', validators=[DataRequired(), Length(min=2, max=20)])
+	phoneNumber = StringField('Phone Number', validators=[DataRequired(), Length(min=10, max=20)])
+	description= StringField('Restaurant Description', validators=[DataRequired(), Length(min=5, max=200)])
 	picture = FileField('Upload a Restuarant Picture', validators=[FileAllowed(['jpg', 'png','jpeg'])])
-
-	submit = SubmitField('Create!')
+	streetAddress = StringField('Street Address', validators=[DataRequired(), Length(min=10, max=50)])
+	unitNumber = IntegerField('Unit Number', validators=[])
+	city = StringField('City', validators = [DataRequired()])
+	state = StringField('State', validators = [DataRequired()])
+	zipCode = IntegerField('Zip code', validators = [DataRequired()])
+	country = StringField('country', validators = [DataRequired()])
+	submit = SubmitField('Add Restuarant!')
 
 	def validate_name(self, name):
 		restaurant = Restaurant.query.filter_by(name=name.data).first()

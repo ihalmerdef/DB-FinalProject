@@ -1,0 +1,10 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="content-section">
+	<div class="media">
+		<h1> {{ restaurant['name'] }}</h1>
+		<p>{{restaurant['description']}}</p>
+		<p>{{restaurant['phoneNumber']}}</p>
+		<img src="{{ url_for('static', filename='restaurant_pics/' + restaurant['picture']) }}">
+	</div>
+{% endblock content %}
