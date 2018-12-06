@@ -65,7 +65,7 @@ class Review(db.Model):
 	__table__ = db.Model.metadata.tables['review']
 
 class Photos(db.Model):
-    __table__ = db.Model.metadata.tables['photos']
+	__table__ = db.Model.metadata.tables['photos']
 
 class Restaurant_Label(db.Model):
 	__table__ = db.Model.metadata.tables['restaurant_label']
