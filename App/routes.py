@@ -5,7 +5,7 @@ from flask import render_template, url_for, flash, redirect, request, abort
 from App import app, db, bcrypt
 from App.forms import RegistrationForm, LoginForm, UpdateAccountForm, creat_resturantForm, update_resturantForm
 # importing models
-from App.models import Address, Customer, Favorite_List, Label, MenuItem,Favorite_List, Menu, Restaurant, RestaurantOwner, Review, Restaurant_Label
+from App.models import Address, Customer, FavoriteList, Label, MenuItem,Restaurant_FavoriteList, Menu, Restaurant, RestaurantOwner, Review, Restaurant_Label
 from flask_login import login_user, current_user, logout_user, login_required
 from datetime import datetime
 
