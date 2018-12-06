@@ -5,7 +5,7 @@ from wtforms import StringField, PasswordField, SubmitField, BooleanField, TextA
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError,Regexp
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
 from App import db
-from App.models import Address, Customer, Favorite_List, Menu, Restaurant, Restaurant_Owner, Review, User
+from App.models import Address, Customer, Favorite_List, Menu, Restaurant, Restaurant_Owner, Review, User 
 from wtforms.fields.html5 import DateField
 
 class RegistrationForm(FlaskForm):
@@ -24,6 +24,35 @@ class RegistrationForm(FlaskForm):
 		user = User.query.filter_by(email=email.data).first()
 		if user:
 			raise ValidationError('That email is taken. Please choose a different one.')
+
+class creat_resturantForm(FlaskForm):
+    name = StringField('Restaurant Name', validators=[DataRequired(), Length(min=2, max=20)])
+    phone_number = StringField('Phone Number', validators=[DataRequired(), Length(min=2, max=20)])
+    description= StringField('Restaurant description', validators=[DataRequired(), Length(min=2, max=20)])
+    picture = FileField('Upload a Restuarant Picture', validators=[FileAllowed(['jpg', 'png','jpeg'])])
+
+    submit = SubmitField('Create!')
+
+    def validate_name(self, name):
+        restaurant = Restaurant.query.filter_by(name=name.data).first()
+        if restaurant:
+            raise ValidationError('That name is taken. Please choose a different one.')
+
+class update_resturantForm(FlaskForm):
+    name = StringField('Restaurant Name', validators=[DataRequired(), Length(min=2, max=20)])
+    phone_number = StringField('Phone Number', validators=[DataRequired(), Length(min=2, max=20)])
+    type= StringField('Food Type', validators=[DataRequired(), Length(min=2, max=20)])
+    picture = FileField('Upload a Restuarant Picture', validators=[FileAllowed(['jpg', 'png','jpeg'])])
+    
+    submit = SubmitField('Update!')
+    
+    def validate_name(self, name):
+        if name.data != current_user.name:
+            restaurant = Restaurant.query.filter_by(name=name.data).first()
+            if restaurant:
+                raise ValidationError('That username is taken. Please choose a different one.')
+
+
 
 class LoginForm(FlaskForm):
 	email = StringField('Email', validators=[DataRequired(), Email()])

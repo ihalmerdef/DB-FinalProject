@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+{% block content %}
+<article class="media content-section">
+    <div class="media-body">
+        <div class="article-metadata">
+            <h2 class="article-title" >Resturants</h2>
+        </div>
+        <table class = "table table-bordered table-hover ">
+            <thead class="thead-dark">
+                <tr>
+    
+                    <th>Resturants Picture</th>
+                   
+                </tr>
+            </thead>
+            <tbody>
+                {% for photos in Viewphoto %}
+                <tr>
+                    <td>{{ photos['id'] }}</td>
+                    <td>{{ photos['data'] }}</td>
+                    <td> <img class="rounded-circle account-img" src="{{ photos['data'] }}">
+                    <td>
+                        
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</article>
+{% endblock content %}
