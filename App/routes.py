@@ -5,7 +5,7 @@ from flask import render_template, url_for, flash, redirect, request, abort
 from App import app, db, bcrypt
 from App.forms import RegistrationForm, LoginForm, UpdateAccountForm, CreateResturantForm, update_resturantForm
 # importing models
-from App.models import Address, Customer, FavoriteList, Label, MenuItem,Restaurant_FavoriteList, Menu, Restaurant, RestaurantOwner, Review, Restaurant_Label
+from App.models import Address, Customer, FavoriteList, Label, MenuItem,Restaurant_FavoriteList, Menu, Restaurant, RestaurantOwner, Review, Restaurant_Label, User
 from flask_login import login_user, current_user, logout_user, login_required
 from datetime import datetime
 
@@ -33,7 +33,7 @@ def register():
 		address = Address(streetAddress = form.streetAddress.data, unitNumber = form.unitNumber.data, city = form.city.data, state = form.state.data, zipCode = form.zipCode.data, country = form.country.data)
 		db.session.add(address)
 		db.session.commit()
-		user = Customer(firstName = form.firstName.data, lastName = form.lastName.data, address_id = address.id, username = form.username.data, email = form.email.data, password = hashed_password)
+		user = User(firstName = form.firstName.data, lastName = form.lastName.data, address_id = address.id, username = form.username.data, email = form.email.data, password = hashed_password, type=form.type.data)
 		db.session.add(user)
 		db.session.commit()
 		flash('Your account has been created! You are now able to log in', 'success')
@@ -72,7 +72,6 @@ def createRestaurant():
 	return render_template('creat_resturant.html', title='CreateRestaurant',form=form)
 
 @app.route("/update_resturant", methods=['GET', 'POST'])
-@login_required
 def update_resturant():
 	form = update_resturantForm()
 	if form.validate_on_submit():
@@ -105,7 +104,8 @@ def login():
 		return redirect(url_for('home'))
 	form = LoginForm()
 	if form.validate_on_submit():
-		user = User.query.filter_by(email=form.email.data).first()
+		if form.type.data:
+			user = User.query.filter_by(email=form.email.data).first()
 		if user and bcrypt.check_password_hash(user.password, form.password.data):
 			login_user(user, remember=form.remember.data)
 			next_page = request.args.get('next')

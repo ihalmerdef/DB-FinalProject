@@ -8,10 +8,13 @@ db.Model.metadata.reflect(db.engine)
 
 @login_manager.user_loader
 def load_user(user_id):
-	result = Customer.query.get(int(user_id))
-	result = RestaurantOwner.query.get(int(user_id))
+	result = User.query.get(int(user_id))
+    #result = RestaurantOwner.query.get(int(user_id))
 	print(type(result))
 	return result
+
+class User(db.Model,UserMixin):
+    __table__ = db.Model.metadata.tables['user']
 
 class Address(db.Model):
 	__table__ = db.Model.metadata.tables['address']
