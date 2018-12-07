@@ -11,13 +11,9 @@ from datetime import datetime
 
 
 @app.route("/")
-#def index():
-#	return render_template("index.html", title = 'Index')
-
 @app.route("/home")
 def home():
 	return render_template("home.html", title = 'Home')
-
 
 @app.route("/about")
 def about():
@@ -100,12 +96,19 @@ def viewRestaurant(restaurantId):
 
 @app.route("/login", methods=['GET', 'POST'])
 def login():
-	if current_user.is_authenticated:
+	print("DEBUG")
+	print (current_user)
+	if current_user.is_authenticated and current_user.type == "Customer":
+		print("DEBUG")
+		print (current_user)
 		return redirect(url_for('home'))
+	elif current_user.is_authenticated and current_user.type == "RestaurantOwner":
+		print("DEBUG")
+		print (current_user)
+		return redirect(url_for('about'))
 	form = LoginForm()
 	if form.validate_on_submit():
-		if form.type.data:
-			user = User.query.filter_by(email=form.email.data).first()
+		user = User.query.filter_by(email=form.email.data).first()
 		if user and bcrypt.check_password_hash(user.password, form.password.data):
 			login_user(user, remember=form.remember.data)
 			next_page = request.args.get('next')
