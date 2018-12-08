@@ -1,14 +1,14 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileAllowed
 from flask_login import current_user
-from wtforms import StringField, PasswordField, SubmitField, BooleanField, TextAreaField, IntegerField, DateField, SelectField
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, TextAreaField, IntegerField, DateField, SelectField, DecimalField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError,Regexp
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
 from App import db
 from App.models import User, Address, Label, MenuItem,FavoriteList, Menu, Restaurant, Review, Restaurant_Label,Restaurant_FavoriteList 
 from wtforms.fields.html5 import DateField
 
-#User Account Forms
+#User Forms
 class RegistrationForm(FlaskForm):
 	firstName = StringField('First Name', validators=[DataRequired(), Length(min=2, max=20)])
 	lastName = StringField('Last Name', validators=[DataRequired(), Length(min=2, max=20)])
@@ -60,11 +60,12 @@ class UpdateAccountForm(FlaskForm):
 			user = User.query.filter_by(email=email.data).first()
 			if user:
 				raise ValidationError('That email is taken. Please choose a different one.')
-#Search Form
+#Search Forms
 class SearchForm(FlaskForm):
 	searchString = StringField('Search query', validators = [DataRequired(), Length(min =2, max= 50)])
 	submit = SubmitField('Search')
 #----------------------------------------------------------
+#Restaurant Forms
 class CreateResturantForm(FlaskForm):
 	name = StringField('Restaurant Name', validators=[DataRequired(), Length(min=2, max=20)])
 	phoneNumber = StringField('Phone Number', validators=[DataRequired(), Length(min=10, max=20)])
@@ -98,8 +99,32 @@ class update_resturantForm(FlaskForm):
 			restaurant = Restaurant.query.filter_by(name=name.data).first()
 			if restaurant:
 				raise ValidationError('That username is taken. Please choose a different one.')
+#----------------------------------------------------------
 
+#Review Forms
+class ReviewForm(FlaskForm):
+	rating = SelectField('Rating', choices = ['1','2','3','4','5'])
+	comment = StringField('Review', validators=[DataRequired(), Length(min=2, max=200)])
+	submit = SubmitField('Add Review')
+#----------------------------------------------------------
 
+#Favorite List Forms
+class FavoriteListForm(FlaskForm):
+	name = StringField('List name', validators=[DataRequired()])
+#----------------------------------------------------------
+
+# Menu Forms
+class MenuForm(FlaskForm):
+	name = StringField('Menu name', validators=[DataRequired()])
+#----------------------------------------------------------
+
+# MenuItem Forms
+class MenuItemForm(FlaskForm):
+	name = StringField('Item name', validators = [DataRequired()])
+	description = StringField('Item description', validators = [DataRequired()])
+	price = DecimalField('Price', validators = [DataRequired()])
+	phote = FileField('Upload a Picture', validators=[FileAllowed(['jpg', 'png','jpeg'])])
+	submit = SubmitField('Add item')
 
 class LoginForm(FlaskForm):
 	email = StringField('Email', validators=[DataRequired(), Email()])
