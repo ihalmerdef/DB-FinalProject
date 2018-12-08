@@ -43,30 +43,30 @@ def login():
 		return redirect(url_for('home'))
 	form = LoginForm()
 	if form.validate_on_submit():
-		global user2
+		global user
 		global next_page
-		user2 = User.query.filter_by(email=form.email.data).first()
+		user = User.query.filter_by(email=form.email.data).first()
 		print("DEBUG")
 		#print(user2.type)
 		#print(form.type.data)
 		#print(user2.type)
 		#print(form.type.data)
-		if user2.type =='RestaurantOwner' and form.type.data =='RestaurantOwner' :
-			print(user2.type)
+		if user.type =='RestaurantOwner' and form.type.data =='RestaurantOwner' :
+			print(user.type)
 			print(form.type.data)
 			#user = User.query.filter_by(email=form.email.data).first()
-			if user2 and bcrypt.check_password_hash(user2.password, form.password.data):
-				login_user(user2, remember=form.remember.data)
+			if user and bcrypt.check_password_hash(user.password, form.password.data):
+				login_user(user, remember=form.remember.data)
 				next_page = request.args.get('next')
 			return redirect(next_page) if next_page else redirect(url_for('home'))
 			flash('Login Unsuccessful. Please check email and password', 'danger')
 
-		if user2.type =='Customer' and form.type.data =='Customer'  :
-			print(user2.type)
+		if user.type =='Customer' and form.type.data =='Customer'  :
+			print(user.type)
 			print(form.type.data)
 			#user = User.query.filter_by(email=form.email.data).first()
-			if user2 and bcrypt.check_password_hash(user2.password, form.password.data):
-				login_user(user2, remember=form.remember.data)
+			if user and bcrypt.check_password_hash(user.password, form.password.data):
+				login_user(user, remember=form.remember.data)
 				next_page = request.args.get('next')
 			return redirect(next_page) if next_page else redirect(url_for('home'))
 
@@ -88,7 +88,7 @@ def save_picture_restaurant(form_picture):
 
 
 @app.route("/creatRestaurant", methods=['GET', 'POST'])
-#@login_required
+@login_required
 def createRestaurant():
 	form = CreateResturantForm()
 	if form.validate_on_submit():
@@ -98,7 +98,7 @@ def createRestaurant():
 		db.session.add(address)
 		db.session.commit()
 		pictureFile = save_picture_restaurant(form.picture.data)
-		restaurant = Restaurant(name=form.name.data, phoneNumber = form.phoneNumber.data,description = form.description.data, picture = pictureFile, address_id = address.id, restaurantOwner_id = 2)
+		restaurant = Restaurant(name=form.name.data, phoneNumber = form.phoneNumber.data,description = form.description.data, picture = pictureFile, address_id = address.id, user_id = user_id)
 		db.session.add(restaurant)
 		db.session.commit()
 		flash('Your restaurant has been created!', 'success')
