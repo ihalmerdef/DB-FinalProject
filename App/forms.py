@@ -8,6 +8,7 @@ from App import db
 from App.models import User, Address, Label, MenuItem,FavoriteList, Menu, Restaurant, Review, Restaurant_Label,Restaurant_FavoriteList 
 from wtforms.fields.html5 import DateField
 
+#User Account Forms
 class RegistrationForm(FlaskForm):
 	firstName = StringField('First Name', validators=[DataRequired(), Length(min=2, max=20)])
 	lastName = StringField('Last Name', validators=[DataRequired(), Length(min=2, max=20)])
@@ -42,7 +43,28 @@ class LoginForm(FlaskForm):
 	submit = SubmitField('Login')
 	
 
-			
+class UpdateAccountForm(FlaskForm):
+	username = StringField('Username', validators=[DataRequired(), Length(min=2, max=20)])
+	email = StringField('Email', validators=[DataRequired(), Email()])
+	picture = FileField('Update Profile Picture', validators=[FileAllowed(['jpg', 'png'])])
+	submit = SubmitField('Update')
+	
+	def validate_username(self, username):
+		if username.data != current_user.username:
+			user = User.query.filter_by(username=username.data).first()
+			if user:
+				raise ValidationError('That username is taken. Please choose a different one.')
+
+	def validate_email(self, email):
+		if email.data != current_user.email:
+			user = User.query.filter_by(email=email.data).first()
+			if user:
+				raise ValidationError('That email is taken. Please choose a different one.')
+#Search Form
+class SearchForm(FlaskForm):
+	searchString = StringField('Search query', validators = [DataRequired(), Length(min =2, max= 50)])
+	submit = SubmitField('Search')
+#----------------------------------------------------------
 class CreateResturantForm(FlaskForm):
 	name = StringField('Restaurant Name', validators=[DataRequired(), Length(min=2, max=20)])
 	phoneNumber = StringField('Phone Number', validators=[DataRequired(), Length(min=10, max=20)])
@@ -86,20 +108,3 @@ class LoginForm(FlaskForm):
 	remember = BooleanField('Remember Me')
 	submit = SubmitField('Login')
 
-class UpdateAccountForm(FlaskForm):
-	username = StringField('Username', validators=[DataRequired(), Length(min=2, max=20)])
-	email = StringField('Email', validators=[DataRequired(), Email()])
-	picture = FileField('Update Profile Picture', validators=[FileAllowed(['jpg', 'png'])])
-	submit = SubmitField('Update')
-	
-	def validate_username(self, username):
-		if username.data != current_user.username:
-			user = User.query.filter_by(username=username.data).first()
-			if user:
-				raise ValidationError('That username is taken. Please choose a different one.')
-
-	def validate_email(self, email):
-		if email.data != current_user.email:
-			user = User.query.filter_by(email=email.data).first()
-			if user:
-				raise ValidationError('That email is taken. Please choose a different one.')
