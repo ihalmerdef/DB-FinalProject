@@ -17,7 +17,6 @@ class User(db.Model,UserMixin):
 class Address(db.Model):
 	__table__ = db.Model.metadata.tables['address']
 
-
 class Label(db.Model):
 	__table__ = db.Model.metadata.tables['label']
 
@@ -32,9 +31,6 @@ class Menu(db.Model):
 
 class Restaurant(db.Model):
 	__table__ = db.Model.metadata.tables['restaurant']
-
-class RestaurantOwner(db.Model, UserMixin):
-	__table__ = db.Model.metadata.tables['restaurantOwner']
 
 class Review(db.Model):
 	__table__ = db.Model.metadata.tables['review']
