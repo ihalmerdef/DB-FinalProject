@@ -17,8 +17,6 @@ class User(db.Model,UserMixin):
 class Address(db.Model):
 	__table__ = db.Model.metadata.tables['address']
 
-class Customer(db.Model, UserMixin):
-	__table__ = db.Model.metadata.tables['customer']
 
 class Label(db.Model):
 	__table__ = db.Model.metadata.tables['label']
