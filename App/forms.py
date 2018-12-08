@@ -33,6 +33,15 @@ class RegistrationForm(FlaskForm):
 		customer = Customer.query.filter_by(email=email.data).first()
 		if customer:
 			raise ValidationError('That email is taken. Please choose a different one.')
+
+class LoginForm(FlaskForm):
+	email = StringField('Email', validators=[DataRequired(), Email()])
+	password = PasswordField('Password', validators=[DataRequired()])
+	type = SelectField('User Type', validators=[DataRequired()])
+	remember = BooleanField('Remember Me')
+	submit = SubmitField('Login')
+	
+
 			
 class CreateResturantForm(FlaskForm):
 	name = StringField('Restaurant Name', validators=[DataRequired(), Length(min=2, max=20)])
@@ -45,13 +54,14 @@ class CreateResturantForm(FlaskForm):
 	state = StringField('State', validators = [DataRequired()])
 	zipCode = IntegerField('Zip code', validators = [DataRequired()])
 	country = StringField('country', validators = [DataRequired()])
-	type = StringField('User Type', validators = [DataRequired()])
+	type = SelectField('User Type', validators = [DataRequired()])
 	submit = SubmitField('Add Restuarant!')
 	
 	def validate_name(self, name):
 		restaurant = Restaurant.query.filter_by(name=name.data).first()
 		if restaurant:
 			raise ValidationError('That name is taken. Please choose a different one.')
+
 
 class update_resturantForm(FlaskForm):
 	name = StringField('Restaurant Name', validators=[DataRequired(), Length(min=2, max=20)])
@@ -72,6 +82,7 @@ class update_resturantForm(FlaskForm):
 class LoginForm(FlaskForm):
 	email = StringField('Email', validators=[DataRequired(), Email()])
 	password = PasswordField('Password', validators=[DataRequired()])
+	type = StringField('User Type', validators=[DataRequired()])
 	remember = BooleanField('Remember Me')
 	submit = SubmitField('Login')
 

@@ -37,6 +37,44 @@ def register():
 #picture_file= url_for('static', filename='profile_pics/' + resturant.photo)
 	return render_template('register.html', title='Register',form=form)
 
+@app.route("/login", methods=['GET', 'POST'])
+def login():
+	if current_user.is_authenticated:
+		return redirect(url_for('home'))
+	form = LoginForm()
+	if form.validate_on_submit():
+		global user2
+		global next_page
+		user2 = User.query.filter_by(email=form.email.data).first()
+		print("DEBUG")
+		#print(user2.type)
+		#print(form.type.data)
+		#print(user2.type)
+		#print(form.type.data)
+		if user2.type =='RestaurantOwner' and form.type.data =='RestaurantOwner' :
+			print(user2.type)
+			print(form.type.data)
+			#user = User.query.filter_by(email=form.email.data).first()
+			if user2 and bcrypt.check_password_hash(user2.password, form.password.data):
+				login_user(user2, remember=form.remember.data)
+				next_page = request.args.get('next')
+			return redirect(next_page) if next_page else redirect(url_for('home'))
+			flash('Login Unsuccessful. Please check email and password', 'danger')
+
+		if user2.type =='Customer' and form.type.data =='Customer'  :
+			print(user2.type)
+			print(form.type.data)
+			#user = User.query.filter_by(email=form.email.data).first()
+			if user2 and bcrypt.check_password_hash(user2.password, form.password.data):
+				login_user(user2, remember=form.remember.data)
+				next_page = request.args.get('next')
+			return redirect(next_page) if next_page else redirect(url_for('home'))
+
+		else:
+			flash('Login Unsuccessful. Please check Email or Password and Account Type', 'danger')
+	return render_template('login.html', title='Login', form=form)
+
+
 def save_picture_restaurant(form_picture):
 	random_hex = secrets.token_hex(8)
 	_, f_ext = os.path.splitext(form_picture.filename)
@@ -92,30 +130,6 @@ def viewRestaurant(restaurantId):
 	restaurant = Restaurant.query.get_or_404(restaurantId)
 	return render_template('viewRestaurant.html', title='Restaurant', restaurant= restaurant)
 
-
-
-@app.route("/login", methods=['GET', 'POST'])
-def login():
-	print("DEBUG")
-	print (current_user)
-	if current_user.is_authenticated and current_user.type == "Customer":
-		print("DEBUG")
-		print (current_user)
-		return redirect(url_for('home'))
-	elif current_user.is_authenticated and current_user.type == "RestaurantOwner":
-		print("DEBUG")
-		print (current_user)
-		return redirect(url_for('about'))
-	form = LoginForm()
-	if form.validate_on_submit():
-		user = User.query.filter_by(email=form.email.data).first()
-		if user and bcrypt.check_password_hash(user.password, form.password.data):
-			login_user(user, remember=form.remember.data)
-			next_page = request.args.get('next')
-			return redirect(next_page) if next_page else redirect(url_for('home'))
-		else:
-			flash('Login Unsuccessful. Please check email and password', 'danger')
-	return render_template('login.html', title='Login', form=form)
 
 @app.route("/logout")
 def logout():
