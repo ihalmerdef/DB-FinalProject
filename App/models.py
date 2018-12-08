@@ -12,7 +12,7 @@ def load_user(user_id):
 	return result
 
 class User(db.Model,UserMixin):
-    __table__ = db.Model.metadata.tables['user']
+	__table__ = db.Model.metadata.tables['user']
 
 class Address(db.Model):
 	__table__ = db.Model.metadata.tables['address']

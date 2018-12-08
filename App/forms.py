@@ -5,7 +5,7 @@ from wtforms import StringField, PasswordField, SubmitField, BooleanField, TextA
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError,Regexp
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
 from App import db
-from App.models import Address, Customer, Label, MenuItem,FavoriteList, Menu, Restaurant, RestaurantOwner, Review, Restaurant_Label,Restaurant_FavoriteList, User
+from App.models import User, Address, Label, MenuItem,FavoriteList, Menu, Restaurant, Review, Restaurant_Label,Restaurant_FavoriteList 
 from wtforms.fields.html5 import DateField
 
 class RegistrationForm(FlaskForm):

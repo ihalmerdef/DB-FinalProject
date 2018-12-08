@@ -6,7 +6,7 @@ from App import app, db, bcrypt
 #importing forms
 from App.forms import RegistrationForm, LoginForm, UpdateAccountForm, CreateResturantForm, update_resturantForm
 # importing models
-from App.models import Address, Customer, FavoriteList, Label, MenuItem,Restaurant_FavoriteList, Menu, Restaurant, RestaurantOwner, Review, Restaurant_Label, User
+from App.models import User, Address, Label, MenuItem,FavoriteList, Menu, Restaurant, Review, Restaurant_Label,Restaurant_FavoriteList 
 from flask_login import login_user, current_user, logout_user, login_required
 from datetime import datetime
 
