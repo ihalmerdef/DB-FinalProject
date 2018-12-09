@@ -4,8 +4,7 @@
       <div class="media">
         <img class="rounded-circle account-img" src="{{ image_file }}">
         <div class="media-body">
-          <h2 class="account-heading">{{ current_user.name }}</h2>
-          <p class="text-secondary">{{ current_user.type }}</p>
+          <h2 class="account-heading">{{ restaurant.name }}</h2>
         </div>
       </div>
         <form method="POST" action="" enctype="multipart/form-data">
@@ -27,31 +26,31 @@
                     {% endif %}
                 </div>
                 <div class="form-group">
-                    {{ form.phone_number.label(class="form-control-label") }}
-                    {% if form.phone_number.errors %}
-                        {{ form.phone_number(class="form-control form-control-lg is-invalid") }}
+                    {{ form.phoneNumber.label(class="form-control-label") }}
+                    {% if form.phoneNumber.errors %}
+                        {{ form.phoneNumber(class="form-control form-control-lg is-invalid") }}
                         <div class="invalid-feedback">
-                            {% for error in form.phone_number.errors %}
+                            {% for error in form.phoneNumber.errors %}
                                 <span>{{ error }}</span>s
                             {% endfor %}
                         </div>
                     {% else %}
-                        {{ form.phone_number(class="form-control form-control-lg") }}
+                        {{ form.phoneNumber(class="form-control form-control-lg") }}
                     {% endif %}
                 </div>
-                <div class="form-group">
-                    {{ form.type.label(class="form-control-label") }}
-                    {% if form.type.errors %}
-                    {{ form.type(class="form-control form-control-lg is-invalid") }}
-                    <div class="invalid-feedback">
-                        {% for error in form.type.errors %}
-                        <span>{{ error }}</span>
-                        {% endfor %}
-                    </div>
-                    {% else %}
-                    {{ form.type(class="form-control form-control-lg") }}
-                    {% endif %}
-                </div>
+				<div class="form-group">
+					{{ form.description.label(class="form-control-label") }}
+					{% if form.description.errors %}
+					{{ form.description(class="form-control form-control-lg is-invalid") }}
+					<div class="invalid-feedback">
+						{% for error in form.description.errors %}
+						<span>{{ error }}</span>
+						{% endfor %}
+					</div>
+					{% else %}
+					{{ form.description(class="form-control form-control-lg") }}
+					{% endif %}
+				</div>
                 <div class="form-group">
                     {{ form.picture.label() }}
                     {{ form.picture(class="form-control-file") }}

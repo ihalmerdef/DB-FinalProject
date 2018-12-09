@@ -4,7 +4,7 @@ from PIL import Image
 from flask import render_template, url_for, flash, redirect, request, abort
 from App import app, db, bcrypt
 #importing forms
-from App.forms import RegistrationForm, LoginForm, UpdateAccountForm, CreateResturantForm, update_resturantForm, SearchForm, ReviewForm, FavoriteListForm, MenuForm, MenuItemForm
+from App.forms import RegistrationForm, LoginForm, UpdateAccountForm, CreateResturantForm, updateRestaurantForm, SearchForm, ReviewForm, FavoriteListForm, MenuForm, MenuItemForm
 # importing models
 from App.models import User, Address, Label, MenuItem,FavoriteList, Menu, Restaurant, Review, Restaurant_Label,Restaurant_FavoriteList
 from flask_login import login_user, current_user, logout_user, login_required
@@ -66,7 +66,7 @@ def login():
 		print("DEBUG")
 		#print(user2.type)
 		#print(form.type.data)
-		#print(user2.type)
+		#print(user.type)
 		#print(form.type.data)
 		if user.type =='RestaurantOwner' and form.type.data =='RestaurantOwner' :
 			print(user.type)
@@ -75,9 +75,7 @@ def login():
 			if user and bcrypt.check_password_hash(user.password, form.password.data):
 				login_user(user, remember=form.remember.data)
 				next_page = request.args.get('next')
-			return redirect(next_page) if next_page else redirect(url_for('home'))
-			flash('Login Unsuccessful. Please check email and password', 'danger')
-
+			return redirect(next_page) if next_page else redirect(url_for('viewRestaurantOwner', userId = user.id))
 		if user.type =='Customer' and form.type.data =='Customer'  :
 			print(user.type)
 			print(form.type.data)
@@ -89,7 +87,20 @@ def login():
 		else:
 			flash('Login Unsuccessful. Please check Email or Password and Account Type', 'danger')
 	return render_template('login.html', title='Login', form=form)
-	
+
+@app.route("/viewRestaurantOwner/<userId>", methods=['GET', 'POST'])
+@login_required
+def viewRestaurantOwner(userId):
+	restaurant = Restaurant.query.filter_by(user_id = userId).first()
+	if restaurant:
+		return render_template('viewRestaurantOwner.html', title='Restaurant', restaurant= restaurant)
+
+	else:
+		flash('You Do Not Have a Restaurant Yet, Please Create Restaurant First', 'danger')
+		return redirect(url_for('createRestaurant',userId = userId))
+
+#return render_template('creatRestaurant.html', title=' Create Restaurant', userId= userId)
+
 @app.route("/logout")
 def logout():
 	logout_user()
@@ -100,9 +111,9 @@ def logout():
 def account():
 	form = UpdateAccountForm()
 	if form.validate_on_submit():
-		if form.picture.data:
-			picture_file = save_picture(form.picture.data)
-			current_user.photo = picture_file
+		#if form.picture.data:
+		#	picture_file = save_picture(form.picture.data)
+		#current_user.photo = picture_file
 		current_user.username = form.username.data
 		current_user.email = form.email.data
 		db.session.commit()
@@ -111,14 +122,14 @@ def account():
 	elif request.method == 'GET':
 		form.username.data = current_user.username
 		form.email.data = current_user.email
-	return render_template('account.html', title='Account', photo=photo, form=form)
+	return render_template('account.html', title='Account', form=form)
 
 #----------------------------------------------------------
 
 #Restaurant CRUD
-@app.route("/creatRestaurant", methods=['GET', 'POST'])
+@app.route("/createRestaurant/<userId>", methods=['GET', 'POST'])
 @login_required
-def createRestaurant():
+def createRestaurant(userId):
 	form = CreateResturantForm()
 	if form.validate_on_submit():
 		if form.picture.data:
@@ -127,29 +138,35 @@ def createRestaurant():
 		db.session.add(address)
 		db.session.commit()
 		pictureFile = save_picture_restaurant(form.picture.data)
-		restaurant = Restaurant(name=form.name.data, phoneNumber = form.phoneNumber.data,description = form.description.data, picture = pictureFile, address_id = address.id, user_id = user_id)
+		restaurant = Restaurant(name=form.name.data, phoneNumber = form.phoneNumber.data,description = form.description.data, picture = pictureFile, address_id = address.id, user_id = userId)
 		db.session.add(restaurant)
 		db.session.commit()
 		flash('Your restaurant has been created!', 'success')
 		return redirect(url_for('home'))
-	return render_template('creat_resturant.html', title='CreateRestaurant',form=form)
+	return render_template('createRestaurant.html', title='Create Restaurant',form=form)
 
-@app.route("/update_resturant", methods=['GET', 'POST'])
-def update_resturant():
-	form = update_resturantForm()
+@app.route("/updateRestaurant/<restaurantId>", methods=['GET', 'POST'])
+@login_required
+def updateRestaurant(restaurantId):
+	restaurant = Restaurant.query.filter_by(id=restaurantId).first()
+	form = updateRestaurantForm()
 	if form.validate_on_submit():
 		if form.picture.data:
 			picture_file = save_picture(form.picture.data)
-			current_user.picture = picture_file
-		current_user.name = form.name.data
-		current_user.phone_number = form.phone_number.data
-		current_user.type = form.type.data
+			restaurant.picture = picture_file
+		restaurant.name = form.name.data
+		restaurant.phoneNumber = form.phoneNumber.data
+		#current_user.type = form.type.data
+		restaurant.description = form.description.data
+		#current_user.address = form.address.data
 		db.session.commit()
 		flash('Your account has been updated!', 'success')
 		return redirect(url_for('home'))
-		form.name.data = current_user.name
-		form.phone_number.data = current_user.phone_number
-	return render_template('update_resturant.html', title='Account', form=form)
+	elif request.method == 'GET':
+		form.name.data = restaurant.name
+		form.phoneNumber.data = restaurant.phoneNumber
+		form.description.data= restaurant.description
+	return render_template('updateRestaurant.html', title='Account',restaurant = restaurant, form=form)
 
 
 
