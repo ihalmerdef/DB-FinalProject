@@ -115,7 +115,8 @@ class FavoriteListForm(FlaskForm):
 
 # Menu Forms
 class MenuForm(FlaskForm):
-	name = StringField('Menu name', validators=[DataRequired()])
+	menuName = StringField('Menu name', validators=[DataRequired(), Length(min = 2, max = 20)])
+	submit = SubmitField('Add Menu')
 #----------------------------------------------------------
 
 # MenuItem Forms

@@ -152,7 +152,19 @@ def update_resturant():
 	return render_template('update_resturant.html', title='Account', form=form)
 
 
+#Menu CRUD
+@app.route("/<restaurantId>/addMenu", methods=['GET','POST'])
+def addMenu(restaurantId):
+	form = MenuForm()
+	if form.validate_on_submit():
+		menu = Menu(restaurant_id = restaurantId, name = form.menuName.data)
+		db.session.add(menu)
+		db.session.commit()
+		flash('Your menu has been created! You are now able to add to it', 'success')
+		return redirect(url_for('home'))
+	return render_template('menu.html', title='Menu', form=form)
 
+#----------------------------------------------------------
 @app.route("/viewRestaurant/<restaurantId>", methods=['GET', 'POST'])
 #TODO: @login_required
 def viewRestaurant(restaurantId):
