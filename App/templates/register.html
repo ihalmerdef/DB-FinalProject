@@ -60,6 +60,19 @@
                         {{ form.email(class="form-control form-control-lg") }}
                     {% endif %}
                 </div>
+				<div class="form-group">
+					{{ form.phoneNumber.label(class="form-control-label") }}
+					{% if form.phoneNumber.errors %}
+					{{ form.phoneNumber(class="form-control form-control-lg is-invalid") }}
+					<div class="invalid-feedback">
+						{% for error in form.phoneNumber.errors %}
+						<span>{{ error }}</span>
+						{% endfor %}
+					</div>
+					{% else %}
+					{{ form.phoneNumber(class="form-control form-control-lg") }}
+					{% endif %}
+				</div>
                 <div class="form-group">
                     {{ form.password.label(class="form-control-label") }}
                     {% if form.password.errors %}

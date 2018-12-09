@@ -14,6 +14,7 @@ class RegistrationForm(FlaskForm):
 	lastName = StringField('Last Name', validators=[DataRequired(), Length(min=2, max=20)])
 	username = StringField('Username', validators=[DataRequired(), Length(min=2, max=20)])
 	email = StringField('Email', validators=[DataRequired(), Email()])
+	phoneNumber = StringField('Phone Number', validators=[DataRequired(), Length(min=10, max=20)])
 	password = PasswordField('Password', validators=[DataRequired()])
 	confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
 	streetAddress = StringField('Street Address', validators=[DataRequired(), Length(min=10, max=50)])
@@ -76,8 +77,8 @@ class CreateResturantForm(FlaskForm):
 	city = StringField('City', validators = [DataRequired()])
 	state = StringField('State', validators = [DataRequired()])
 	zipCode = IntegerField('Zip code', validators = [DataRequired()])
-	country = StringField('country', validators = [DataRequired()])
-	type = SelectField('User Type', validators = [DataRequired()])
+	country = StringField('Country', validators = [DataRequired()])
+	#type = SelectField('User Type', validators = [DataRequired()])
 	submit = SubmitField('Add Restuarant!')
 	
 	def validate_name(self, name):
@@ -86,19 +87,19 @@ class CreateResturantForm(FlaskForm):
 			raise ValidationError('That name is taken. Please choose a different one.')
 
 
-class update_resturantForm(FlaskForm):
+class updateRestaurantForm(FlaskForm):
 	name = StringField('Restaurant Name', validators=[DataRequired(), Length(min=2, max=20)])
-	phone_number = StringField('Phone Number', validators=[DataRequired(), Length(min=2, max=20)])
-	type= StringField('Food Type', validators=[DataRequired(), Length(min=2, max=20)])
+	phoneNumber = StringField('Phone Number', validators=[DataRequired(), Length(min=2, max=20)])
+	#type= StringField('Food Type', validators=[DataRequired(), Length(min=2, max=20)])
+	description= StringField('Restaurant Description', validators=[DataRequired(), Length(min=5, max=200)])
 	picture = FileField('Upload a Restuarant Picture', validators=[FileAllowed(['jpg', 'png','jpeg'])])
 	
 	submit = SubmitField('Update!')
 	
 	def validate_name(self, name):
-		if name.data != current_user.name:
-			restaurant = Restaurant.query.filter_by(name=name.data).first()
-			if restaurant:
-				raise ValidationError('That username is taken. Please choose a different one.')
+		restaurant = Restaurant.query.filter_by(name=name.data).first()
+		if restaurant:
+			raise ValidationError('That name is taken. Please choose a different one.')
 #----------------------------------------------------------
 
 #Review Forms

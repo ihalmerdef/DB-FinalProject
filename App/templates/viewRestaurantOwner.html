@@ -1,0 +1,11 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="content-section">
+	<div class="media">
+		<h1> {{ restaurant['name'] }}</h1>
+		<p>{{restaurant['description']}}</p>
+		<p>{{restaurant['phoneNumber']}}</p>
+		<a class="btn btn-primary btn-sm m-1" href = "{{url_for('updateRestaurant', restaurantId = restaurant['id'])}}">Update</a>
+		
+	</div>
+{% endblock content %}

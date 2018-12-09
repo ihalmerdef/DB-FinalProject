@@ -23,7 +23,7 @@
                 <div class="form-group">
                     {{ form.phoneNumber.label(class="form-control-label") }}
                     {% if form.phoneNumber.errors %}
-                        {{ form.phoneNumber(class="form-control form-control-lg is-invalid") }}
+                        {{ form.phoneNumber(class="form-control f orm-control-lg is-invalid") }}
                         <div class="invalid-feedback">
                             {% for error in form.phoneNumber.errors %}
                                 <span>{{ error }}</span>
