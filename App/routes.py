@@ -6,7 +6,7 @@ from App import app, db, bcrypt
 #importing forms
 from App.forms import RegistrationForm, LoginForm, UpdateAccountForm, CreateResturantForm, updateRestaurantForm, SearchForm, ReviewForm, FavoriteListForm, MenuForm, MenuItemForm
 # importing models
-from App.models import User, Address, Label, MenuItem,FavoriteList, Menu, Restaurant, Review, Restaurant_Label,Restaurant_FavoriteList
+from App.models import User, Address, Label, MenuItem, FavoriteList, Menu, Restaurant, Review, Restaurant_Label, Restaurant_FavoriteList
 from flask_login import login_user, current_user, logout_user, login_required
 from datetime import datetime
 
@@ -29,7 +29,7 @@ def home():
 	if form.validate_on_submit():
 		searchString = form.searchString.data
 		restaurants = Restaurant.query.all()
-		#TODO: implement the search algorithm here
+		#TODO: implement the search algorithm and geolocation here
 	return render_template("home.html", title = 'Home', form = form)
 
 @app.route("/about")
@@ -47,7 +47,7 @@ def register():
 		address = Address(streetAddress = form.streetAddress.data, unitNumber = form.unitNumber.data, city = form.city.data, state = form.state.data, zipCode = form.zipCode.data, country = form.country.data)
 		db.session.add(address)
 		db.session.commit()
-		user = User(firstName = form.firstName.data, lastName = form.lastName.data, address_id = address.id, username = form.username.data, email = form.email.data, password = hashed_password, type=form.type.data)
+		user = User(firstName = form.firstName.data, lastName = form.lastName.data,  username = form.username.data, email = form.email.data, phoneNumber = form.phoneNumber.data, password = hashed_password,address_id = address.id,  type = form.userType.data)
 		db.session.add(user)
 		db.session.commit()
 		flash('Your account has been created! You are now able to log in', 'success')
@@ -190,6 +190,12 @@ def viewMenu(restaurantId):
 	print("#DEBUG")
 	print(menus)
 	return render_template('viewMenu.html', title = 'view Menu', menus = menus)
+
+#TODO: check if the review belongs to the current user
+@app.route("/deleteMenu", methods = ['GET'])
+def deleteMenu():
+	menuId = request.args.get('menuId')
+	menu = Menu.query.get((int)(menuId))
 	
 #----------------------------------------------------------
 @app.route("/viewRestaurant/<restaurantId>", methods=['GET', 'POST'])
@@ -220,7 +226,7 @@ def addReview():
 # TODO: check if the review belongs to the current user
 @app.route("/deleteReview", methods = ['GET'])
 def deleteReview():
-	# reading the query parameter from the query stirng (deleteReview?reviewId=xyx)
+	# reading the query parameter from the query string (deleteReview?reviewId=xyx)
 	reviewId = request.args.get('reviewId')
 	print("DEBUG reviewId = " + reviewId)
 	review = Review.query.get((int)(reviewId))
@@ -233,3 +239,15 @@ def deleteReview():
 		print("DEBUG review is none")
 	return redirect(url_for('home'))
 #---------------------------------------------------------
+#FavoriteList CRUD
+@app.route("/favoriteList", methods = ['GET', 'POST'])
+def favoriteList():
+	form = FavoriteListForm()
+	if form.validate_on_submit():
+		userId = request.args.get('userId')
+		favoriteList = FavoriteList(name = form.name.data, user_id = current_user.id)
+		db.session.add(favoriteList)
+		db.session.commit()
+		flash('Your list has been created!', 'success')
+		return redirect(url_for('home'))
+	return render_template('favoriteList.html', title='Favorite List', form = form)

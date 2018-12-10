@@ -100,6 +100,7 @@
                     {% endif %}
                 </div>
                 <br/>
+				<h1>your Address</h1>
                 <div class="form-group">
                     {{ form.streetAddress.label(class="form-control-label") }}
                     {% if form.streetAddress.errors %}
@@ -179,10 +180,17 @@
                     {% endif %}
                 </div>
                 <div class="form-group">
-                    <select name="type">
-                        <option value="Customer"> Customer</option>
-                        <option value="RestaurantOwner"> Restaurant Owner</option>
-                    </select>
+                    {{ form.userType.label(class="form-control-label") }}
+                    {% if form.userType.errors %}
+                        {{ form.userType(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.userType.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.userType(class="form-control form-control-lg") }}
+                    {% endif %}
                 </div>
             </fieldset>
             <div class="form-group">

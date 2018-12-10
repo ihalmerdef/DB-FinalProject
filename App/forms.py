@@ -7,8 +7,10 @@ from wtforms.ext.sqlalchemy.fields import QuerySelectField
 from App import db
 from App.models import User, Address, Label, MenuItem,FavoriteList, Menu, Restaurant, Review, Restaurant_Label,Restaurant_FavoriteList 
 from wtforms.fields.html5 import DateField
+from App.config import userTypes
 
 #Global scope
+
 ratingChoices = [('1', '1'),('2', '2'),('3', '3'),('4', '4'),('5', '5')]
 
 #User Forms
@@ -26,7 +28,7 @@ class RegistrationForm(FlaskForm):
 	state = StringField('State', validators = [DataRequired()])
 	zipCode = IntegerField('Zip code', validators = [DataRequired()])
 	country = StringField('Country', validators = [DataRequired()])
-	type = StringField('User Type', validators = [DataRequired()])
+	userType = SelectField('User Type', validators = [DataRequired()], choices = userTypes)
 	submit = SubmitField('Sign Up')
 	
 	def validate_username(self, username):
@@ -115,6 +117,7 @@ class ReviewForm(FlaskForm):
 #Favorite List Forms
 class FavoriteListForm(FlaskForm):
 	name = StringField('List name', validators=[DataRequired()])
+	submit = SubmitField('Create List')
 #----------------------------------------------------------
 
 # Menu Forms
