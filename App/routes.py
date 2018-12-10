@@ -217,4 +217,19 @@ def addReview():
 		flash('Your review has been created! Thanks', 'success')
 		return redirect(url_for('home'))
 	return render_template('review.html', title='review', form = form)
-
+# TODO: check if the review belongs to the current user
+@app.route("/deleteReview", methods = ['GET'])
+def deleteReview():
+	# reading the query parameter from the query stirng (deleteReview?reviewId=xyx)
+	reviewId = request.args.get('reviewId')
+	print("DEBUG reviewId = " + reviewId)
+	review = Review.query.get((int)(reviewId))
+	if review:
+		print(review)
+		db.session.delete(review)
+		db.session.commit()
+		flash('Your review has been delete!', 'success')
+	else:
+		print("DEBUG review is none")
+	return redirect(url_for('home'))
+#---------------------------------------------------------
