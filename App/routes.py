@@ -179,8 +179,18 @@ def addMenu(restaurantId):
 		db.session.commit()
 		flash('Your menu has been created! You are now able to add to it', 'success')
 		return redirect(url_for('home'))
+	elif request.method == 'GET':
+		menu = Menu.query.filter_by(restaurant_id = restaurantId).first()
+		form.menuName.data = menu.name
 	return render_template('menu.html', title='Menu', form=form)
 
+@app.route("/<restaurantId>/viewMenus", methods=['GET','POST'])
+def viewMenu(restaurantId):
+	menus = Menu.query.filter_by(restaurant_id = restaurantId).all()
+	print("#DEBUG")
+	print(menus)
+	return render_template('viewMenu.html', title = 'view Menu', menus = menus)
+	
 #----------------------------------------------------------
 @app.route("/viewRestaurant/<restaurantId>", methods=['GET', 'POST'])
 #TODO: @login_required
@@ -189,9 +199,22 @@ def viewRestaurant(restaurantId):
 	return render_template('viewRestaurant.html', title='Restaurant', restaurant= restaurant)
 
 # Review CRUD
-@app.route("/addReview")
-#@login_required
+@app.route("/addReview", methods = ['GET', 'POST'])
 def addReview():
 	form = ReviewForm()
-	#if form.validate_on_submit():
-	return render_template('review.html', title='Review', form=form)
+	if form.validate_on_submit():
+		userId = request.args.get('userId')
+		restaurantId = request.args.get('restaurantId')
+		now = datetime.utcnow()#.strftime('%Y %m %d')
+		print('DEBUG')
+		print(request.form)
+		print(userId)
+		print(restaurantId)
+		print('DEBUG now = ' + now.strftime('%Y %m %d'))
+		review = Review(rating = form.rating.data, comment = form.comment.data, date = now, restaurant_id = restaurantId, user_id = userId)
+		db.session.add(review)
+		db.session.commit()
+		flash('Your review has been created! Thanks', 'success')
+		return redirect(url_for('home'))
+	return render_template('review.html', title='review', form = form)
+

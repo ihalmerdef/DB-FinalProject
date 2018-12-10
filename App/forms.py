@@ -8,6 +8,9 @@ from App import db
 from App.models import User, Address, Label, MenuItem,FavoriteList, Menu, Restaurant, Review, Restaurant_Label,Restaurant_FavoriteList 
 from wtforms.fields.html5 import DateField
 
+#Global scope
+ratingChoices = [('1', '1'),('2', '2'),('3', '3'),('4', '4'),('5', '5')]
+
 #User Forms
 class RegistrationForm(FlaskForm):
 	firstName = StringField('First Name', validators=[DataRequired(), Length(min=2, max=20)])
@@ -104,7 +107,7 @@ class updateRestaurantForm(FlaskForm):
 
 #Review Forms
 class ReviewForm(FlaskForm):
-	rating = SelectField('Rating', choices = ['1','2','3','4','5'])
+	rating = SelectField('Rating (out of 5)', choices = ratingChoices, validators=[DataRequired()])
 	comment = StringField('Review', validators=[DataRequired(), Length(min=2, max=200)])
 	submit = SubmitField('Add Review')
 #----------------------------------------------------------
