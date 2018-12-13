@@ -8,11 +8,13 @@ db.Model.metadata.reflect(db.engine)
 
 @login_manager.user_loader
 def load_user(user_id):
-	result = User.query.get(int(user_id))
-	return result
+	return User.query.get(int(user_id))
 
 class User(db.Model,UserMixin):
+	__table_args__ = {'extend_existing': True}
 	__table__ = db.Model.metadata.tables['user']
+	def __repr__(self):
+		return f"User('{self.username}', '{self.email}')"
 
 class Address(db.Model):
 	__table__ = db.Model.metadata.tables['address']
@@ -31,12 +33,10 @@ class Menu(db.Model):
 
 class Restaurant(db.Model):
 	__table__ = db.Model.metadata.tables['restaurant']
+	__searchable__ = ['name', 'description']
 
 class Review(db.Model):
 	__table__ = db.Model.metadata.tables['review']
-
-class Photos(db.Model):
-	__table__ = db.Model.metadata.tables['photos']
 
 class Restaurant_Label(db.Model):
 	__table__ = db.Model.metadata.tables['restaurant_label']

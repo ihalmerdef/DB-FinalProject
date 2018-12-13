@@ -7,8 +7,10 @@
 
 		<!-- Bootstrap CSS -->
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+		<!-- Font Awesome -->
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
 		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
+		
 		<!-- page title -->
 		{% if title %}
 			<title>Food - {{ title }}</title>
@@ -29,49 +31,47 @@
 						<a class="nav-item nav-link" href="{{ url_for('home') }}">Home</a>
 						<a class="nav-item nav-link" href="{{ url_for('about') }}">About</a>
 					</div>
+					
 					<!-- Navbar Right Side -->
 					<div class="navbar-nav">
 						{% if current_user.is_authenticated %}
-							<a class="nav-item nav-link" href="{{ url_for('account') }}">Account</a>
-							<a class="nav-item nav-link" href="{{ url_for('logout') }}">Logout</a>
+							<!-- Customer View -->
+							{%if current_user.type == 'Customer' %}
+								<a class="nav-item nav-link" href="{{  url_for('favoriteList', userId=current_user.id) }}">Favorite Lists&nbsp;<i class="fas fa-list-ul"></i></a>
+							{% endif %}
+							<!-- Restaurant Owner view -->
+							{%if current_user.type == 'RestaurantOwner' %}
+								<a class="nav-item nav-link" href="{{  url_for('viewRestaurantOwner', userId=current_user.id)}}">Manage Restaurant&nbsp;<i class="fas fa-building"></i></a>
+							{% endif %}
+							<a class="nav-item nav-link" href="{{ url_for('account') }}">Account&nbsp;<i class="fas fa-user-alt"></i></a>
+							<a class="nav-item nav-link" href="{{ url_for('logout') }}">Logout&nbsp;<i class="fas fa-sign-out-alt"></i></a>
 						{% else %}
-							<a class="nav-item nav-link" href="{{ url_for('login') }}">Login</a>
-							<a class="nav-item nav-link" href="{{ url_for('register') }}">Register</a>
+							<a class="nav-item nav-link" href="{{ url_for('login') }}">Login&nbsp;<i class="fas fa-sign-in-alt"></i></a>
+							<a class="nav-item nav-link" href="{{ url_for('register') }}">Register<i class="fas fa-user-plus"></i></a>
 						{% endif %}
 					</div>
 				</div>
 			</div>
-		  </nav>
+		</nav>
 		</header>
 		<main role="main" class="container">
-		  <div class="row">
-			<div class="col-md-8">
-			  {% with messages = get_flashed_messages(with_categories=true) %}
-				{% if messages %}
-				  {% for category, message in messages %}
-					<div class="alert alert-{{ category }}">
-					  {{ message }}
-					</div>
-				  {% endfor %}
-				{% endif %}
-			  {% endwith %}
-			  {% block content %}{% endblock %}
+			<div class="container">
+				<div class="container-fluid">
+				  {% with messages = get_flashed_messages(with_categories=true) %}
+					{% if messages %}
+					{% for category, message in messages %}
+						<div class="alert alert-{{ category }}">
+							{{ message }}
+						</div>
+					{% endfor %}
+					{% endif %}
+				{% endwith %}
+				</div>
+				{% block content %}
+				<!-- Content goes here-->
+				{% endblock %}
 			</div>
-			<div class="col-md-4">
-		  <div class="content-section">
-			<h3>Help</h3>
-			<p class='text-muted'>
-				<ul class="list-group">
-					<input type="button" onclick="location.href='/addReview?userId=4&restaurantId=15';" value="add review"class="btn btn-primary"/>
-					<li class="list-group-item list-group-item-light">projects: list of all projects</li>
-				</ul>
-			  
-			</p>
-		  </div>
-		</div>
-		  </div>
 		</main>
-
 
 		<!-- Optional JavaScript -->
 		<!-- jQuery first, then Popper.js, then Bootstrap JS -->

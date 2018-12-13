@@ -1,0 +1,9 @@
+{% extends "layout.html" %}
+{% block content %}
+	<div class="content-section">
+		{% for menu in menus %}
+				<p><a href="{{url_for('viewMenu', menuId=menu['id'])}}">{{menu['name']}}</a></p>
+				<input value ="add items" type="button" onclick="winodow.location.href='{{url_for('addMenuItem', menuId=menu['id'])}}'" class="btn btn-primary"></input>
+		{% endfor%}
+		</div>
+{% endblock content %}

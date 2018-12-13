@@ -1,0 +1,36 @@
+{% extends "layout.html" %}
+{% block content %}
+	<div class="content-section">
+		{% if favoriteLists %}
+			{% for favoriteList in favoriteLists%}
+				<div class="content-section">
+					<p><a href="{{url_for('viewFavoriteList', favoriteListId=favoriteList['id'] )}}">{{favoriteList['name']}}</a></p>
+				</div>
+			{% endfor %}
+		{% else%}
+			<p> you don't have any list. create a new list </p>
+		{% endif %}
+		<form method="POST" action="">
+			{{ form.hidden_tag() }}
+			<fieldset class="form-group">
+				<legend class="border-bottom mb-4">Create a new list</legend>
+				<div class="form-group">
+					{{ form.name.label(class="form-control-label") }}
+					{% if form.name.errors %}
+						{{ form.name(class="form-control form-control-lg is-invalid") }}
+						<div class="invalid-feedback">
+							{% for error in form.name.errors %}
+								<span>{{ error }}</span>
+							{% endfor %}
+						</div>
+					{% else %}
+						{{ form.name(class="form-control form-control-lg") }}
+					{% endif %}
+				</div>
+			</fieldset>
+			<div class="form-group">
+				{{ form.submit(class="btn btn-outline-info") }}
+			</div>
+		</form>
+	</div>
+{% endblock content %}

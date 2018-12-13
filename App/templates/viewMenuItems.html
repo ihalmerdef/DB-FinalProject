@@ -1,0 +1,13 @@
+{% extends "layout.html" %}
+{% block content %}
+	<div class="content-section">
+		{% for item in menuItems %}
+				<div class = "container">
+				<img class = "float-left m-4" src="{{ url_for('static', filename='restaurant_pics/' + item['picture']) }}"/>
+				<p>{{item['name']}}</p>
+				<p>{{item['description']}}</p>
+				<p>${{item['price']}}</p>
+				</div>
+		{% endfor%}
+		</div>
+{% endblock content %}

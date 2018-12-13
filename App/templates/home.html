@@ -2,7 +2,7 @@
 {% block content %}
 		<article class="media content-section">
 			<div class="media-body">
-				<h1>Home</h1>
+				<h3>Home</h3>
 				<form method="POST" action="">
 					{{ form.hidden_tag() }}
 					<fieldset class="form-group">
@@ -27,4 +27,26 @@
 				</form>
 			</div>
 		</article>
+		{% if current_user.is_authenticated and current_user.type == 'Customer' %}
+			{% if restaurantsNearBy %}
+				<article class="media content-section">
+					<div class="media-body">
+							<legend class="border-bottom mb-4">Restaurants in your area</legend>
+							{% if restaurantsNearBy %}
+								{% for restaurant in restaurantsNearBy %}
+									<div>
+										<p class = "h3 border-bottom mb-4"><a href = "{{ url_for('viewRestaurant', restaurantId=restaurant['id'])}}"> {{restaurant['name'] }} </a></p>
+										<p> {{restaurant['description'] }}</p>
+									</div>
+								{% endfor %}
+							{% else %}
+								<div>
+									
+									<p> There are no restaurants in you area</p>
+								</div>
+							{% endif %}	
+					</div>
+				</article>
+			{% endif %}
+		{% endif %}
 {% endblock content %}

@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+{% block content %}
+	<div class="content-section">
+		<div class="media">
+			<div class="media-body">
+				<article class="media content-section">
+					<div class="media-body">
+							<legend class="border-bottom mb-4">Search Results:</legend>
+							{% if searchResults %}
+								{% for restaurant in searchResults %}
+									<div>
+										<p class = "h3"><a href = "{{ url_for('viewRestaurant', restaurantId = restaurant['id'])}}"> {{restaurant['name'] }} </a></p>
+										<p> {{ restaurant['description'] }} </p>
+									</div>
+								{% endfor %}
+							{%else%}
+								<div>
+									
+									<p class = "h3"> Your search returned 0 results, try again</p>
+									</div>
+							{% endif %}	
+					</div>
+				</article>
+			</div>
+		</div>
+	</div>
+
+
+{% endblock content %}

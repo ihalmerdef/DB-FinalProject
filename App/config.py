@@ -1,6 +1,18 @@
-# states list from https://www.census.gov/geo/maps-data/data/tiger-geodatabases.html
+#Configuration File
+
 userTypes = [('Customer','Customer'), ('RestaurantOwner','RestaurantOwner')]
 
+ratingChoices = [('1', '1'),('2', '2'),('3', '3'),('4', '4'),('5', '5')]
+
+# Database connection parameters
+connection = {
+	'host' : 'dbmysql.cpbuyejbc4kx.us-west-2.rds.amazonaws.com',
+	'database' : 'FoodDB',
+	'user' : 'mustafa',
+	'password' : 'mustafa_DBMySQL'
+}
+
+# states list from https://www.census.gov/geo/maps-data/data/tiger-geodatabases.html
 USStates = [
 'Alabama',
 'Alaska',

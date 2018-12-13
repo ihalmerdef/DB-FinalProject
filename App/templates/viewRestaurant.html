@@ -1,10 +1,42 @@
 {% extends "layout.html" %}
 {% block content %}
-<div class="content-section">
-	<div class="media">
-		<h1> {{ restaurant['name'] }}</h1>
-		<p>{{restaurant['description']}}</p>
-		<p>{{restaurant['phoneNumber']}}</p>
-		<img src="{{ url_for('static', filename='restaurant_pics/' + restaurant['picture']) }}">
-	</div>
+		<div class="content-section">
+				<img class = "float-left m-4" src="{{ url_for('static', filename='restaurant_pics/' + restaurant['restaurantPicture']) }}"/>
+				<p class="h3">{{ restaurant['restaurantName'] }}</p>
+				<p>{{restaurant['restaurantName']}}</p>
+				<p>Phone Number: {{restaurant['restaurantPhoneNumber']}}</p>
+				<p>Address: {{restaurant['addressStreetAddress']}} {{restaurant['addressCity']}}, {{restaurant['addressState']}}, {{restaurant['addresstZipCode']}}</p>
+				{% if current_user.is_authenticated and current_user.type == 'Customer'%}
+					
+				{% endif %}
+		</div>
+		<legend class="border-bottom mb-4">Reviews</legend>
+			<div class="content-section">
+				{% if reviewStats %}
+					<p class="border-bottom">This restaurant has average rating: {{ reviewStats['averageRating'] }} based on {{reviewStats['reviewCount']}} reviews</p>
+				{% endif %}
+				{% if reviews%}
+					
+					{% for review in reviews %}
+						<div class = "border-bottom">
+						<p> Rating: {{ review['rating']}}</p>
+						<p>{{review['comment']}}</p>
+						<p class = "text-muted">Review data:{{review['date']}}</p>
+						<div class = "row">
+							{% if review.user_id == current_user.id%}
+								<input class = "btn btn-primary"  type = "button" onclick = "window.location.href='/review/update?reviewId={{review['id']}}'" value = "Update" ></input>
+								<input class = "btn btn-danger"  type = "button" onclick = "window.location.href='/review/delete?reviewId={{review['id']}}'" value = "Delete" ></input>
+							{% endif%}
+						</div>
+						</div>
+					{% endfor %}
+				{% else %}
+					<p> There are no reviews for this restaurant</p>
+				{% endif %}
+			</div>
+			{% if current_user.is_authenticated and current_user.type == 'Customer'%}
+			<div class="content-section">
+				<input class = "btn btn-primary" type = "button" onclick = "window.location.href = '/review/add?userId={{current_user.id}}&restaurantId={{ restaurant['restaurantId']}}'" value = "Add Review" ></input>
+			</div>
+			{% endif%}
 {% endblock content %}
